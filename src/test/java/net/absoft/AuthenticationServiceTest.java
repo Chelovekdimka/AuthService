@@ -12,7 +12,10 @@ import org.testng.asserts.SoftAssert;
 
 public class AuthenticationServiceTest {
 
-  @Test
+  @Test (
+          description = "Test Successful Authentication",
+          groups = "positive"
+  )
   public void testSuccessfulAuthentication() {
     Response response = new AuthenticationService().authenticate("user1@test.com", "password1");
     assertEquals(response.getCode(), 200, "Response code should be 200");
@@ -20,7 +23,10 @@ public class AuthenticationServiceTest {
         "Token should be the 32 digits string. Got: " + response.getMessage());
   }
 
-  @Test
+  @Test (
+          description = "Test Authentication With Wrong Password",
+          groups = "negative"
+  )
   public void testAuthenticationWithWrongPassword() {
     validateErrorResponse(
             new AuthenticationService().authenticate("user1@test.com", "wrong_password1"),
@@ -36,14 +42,18 @@ public class AuthenticationServiceTest {
     sa.assertAll();
   }
 
-  @Test
+  @Test (
+          description = "Test Authentication With Empty Email",
+          groups = "negative")
   public void testAuthenticationWithEmptyEmail() {
     Response expectedResponse = new Response(400, "Email should not be empty string");
     Response actualResponse = new AuthenticationService().authenticate("", "password1");
     assertEquals(actualResponse, expectedResponse, "Unexpected response");
   }
 
-  @Test
+  @Test (
+          description = "Test Authentication With Invalid Email",
+          groups = "negative")
   public void testAuthenticationWithInvalidEmail() {
     Response response = new AuthenticationService().authenticate("user1", "password1");
     assertEquals(response.getCode(), 400, "Response code should be 200");
@@ -51,7 +61,9 @@ public class AuthenticationServiceTest {
         "Response message should be \"Invalid email\"");
   }
 
-  @Test
+  @Test (description = "Test Authentication With Empty Password",
+          groups = "negative"
+  )
   public void testAuthenticationWithEmptyPassword() {
     Response response = new AuthenticationService().authenticate("user1@test", "");
     assertEquals(response.getCode(), 400, "Response code should be 400");
