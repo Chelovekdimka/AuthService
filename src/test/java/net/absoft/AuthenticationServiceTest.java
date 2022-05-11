@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import net.absoft.data.Response;
 import net.absoft.services.AuthenticationService;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class AuthenticationServiceTest {
 
@@ -21,19 +22,25 @@ public class AuthenticationServiceTest {
 
   @Test
   public void testAuthenticationWithWrongPassword() {
-    Response response = new AuthenticationService()
-        .authenticate("user1@test.com", "wrong_password1");
-    assertEquals(response.getCode(), 401, "Response code should be 401");
-    assertEquals(response.getMessage(), "Invalid email or password",
-        "Response message should be \"Invalid email or password\"");
+    validateErrorResponse(
+            new AuthenticationService().authenticate("user1@test.com", "wrong_password1"),
+            401, "Invalid email or password"
+    );
+  }
+
+  private void validateErrorResponse(Response response, int code, String message) {
+    SoftAssert sa = new SoftAssert();
+    sa.assertEquals(response.getCode(), code, "Response code should be 401");
+    sa.assertEquals(response.getMessage(), message,
+            "BROKEN Invalid email or password");
+    sa.assertAll();
   }
 
   @Test
   public void testAuthenticationWithEmptyEmail() {
-    Response response = new AuthenticationService().authenticate("", "password1");
-    assertEquals(response.getCode(), 400, "Response code should be 400");
-    assertEquals(response.getMessage(), "Email should not be empty string",
-        "Response message should be \"Email should not be empty string\"");
+    Response expectedResponse = new Response(400, "Email should not be empty string");
+    Response actualResponse = new AuthenticationService().authenticate("", "password1");
+    assertEquals(actualResponse, expectedResponse, "Unexpected response");
   }
 
   @Test
