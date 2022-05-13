@@ -26,7 +26,7 @@ private String message;
         "Token should be the 32 digits string. Got: " + response.getMessage());
   }
 
-  @DataProvider(name = "invalidLogins")
+  @DataProvider(name = "invalidLogins", parallel = true)
   public Object [][] invalidLogins() {
     return new Object[][] {
             new Object[]{"user1@test.com", "wrong_password1", new Response(401,"Invalid email or password")},
