@@ -7,20 +7,31 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.absoft.data.Response;
 import net.absoft.services.AuthenticationService;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
-public class AuthenticationServiceTest {
+public class AuthenticationServiceTest extends BaseTest{
 private AuthenticationService authenticationService;
 private String message;
+
+
+  @BeforeMethod (alwaysRun = true)
+  public void setUp() {
+    authenticationService = new AuthenticationService();
+    System.out.println("setup");
+  }
+
+  @AfterMethod
+  public void tearDown() {
+    System.out.println("teardown");
+  }
 
   @Test (
           description = "Test Successful Authentication",
           groups = "positive"
   )
   public void testSuccessfulAuthentication() {
-    Response response = new AuthenticationService().authenticate("user1@test.com", "password1");
+    Response response = authenticationService.authenticate("user1@test.com", "password1");
     assertEquals(response.getCode(), 200, "Response code should be 200");
     assertTrue(validateToken(response.getMessage()),
         "Token should be the 32 digits string. Got: " + response.getMessage());
@@ -42,12 +53,13 @@ private String message;
         dataProvider = "invalidLogins"
 )
   public void testInvalidAuthentication(String email, String password, Response expectedResponse) {
-    Response response = new AuthenticationService()
+    Response response = authenticationService
             .authenticate("user1@test", "wrong_password1");
     assertEquals(response.getCode(), 401, "Response code should be 401");
     assertEquals(response.getMessage(), "Invalid email or password",
             "Response message should be \"Password should not be empty string\"");
   }
+
 
 
 //  @Test (
