@@ -16,7 +16,6 @@ dependencies {
 
 test {
     useTestNG(){
-
         suites "src/test/resources/suites/suite.xml"
         suites "src/test/resources/suites/suite_negative.xml"
         suites "src/test/resources/suites/suite_positive.xml"
