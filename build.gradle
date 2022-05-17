@@ -27,3 +27,9 @@ task retest(type: Test) {
         suites "build/reports/tests/test/testng-failed.xml"
     }
 }
+test {
+    useTestNG {
+        excludeGroups 'positive'
+
+    }
+}
