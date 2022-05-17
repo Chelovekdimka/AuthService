@@ -19,5 +19,11 @@ test {
         suites "src/test/resources/suites/suite.xml"
         suites "src/test/resources/suites/suite_negative.xml"
         suites "src/test/resources/suites/suite_positive.xml"
+        useDefaultListeners true
+    }
+}
+task retest(type: Test) {
+    useTestNG() {
+        suites "build/reports/tests/test/testng-failed.xml"
     }
 }

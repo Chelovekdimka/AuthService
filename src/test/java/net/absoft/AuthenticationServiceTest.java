@@ -1,14 +1,17 @@
 package net.absoft;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.sun.net.httpserver.Authenticator;
 import net.absoft.data.Response;
 import net.absoft.services.AuthenticationService;
+import org.testng.IRetryAnalyzer;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
+
+import static org.testng.Assert.*;
 
 public class AuthenticationServiceTest extends BaseTest{
 private AuthenticationService authenticationService;
@@ -25,6 +28,16 @@ private String message;
   public void tearDown() {
     System.out.println("teardown");
   }
+
+  @Test(
+          groups = "negative"
+  )
+  public void testSample() throws InterruptedException {
+    Thread.sleep(2000);
+    System.out.println("test Sample: " + new Date());
+    fail("FAILING TEST");
+  }
+
 
   @Test (
           description = "Test Successful Authentication",
